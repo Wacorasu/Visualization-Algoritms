@@ -7,6 +7,13 @@ import { Direction } from "../../types/direction";
 import { LettersStep } from "../../types/string";
 import { Column } from "../ui/column/column";
 import { ElementStates } from "../../types/element-states";
+import {
+  MAX_LENGTH_SORT_ARRAY,
+  MAX_VALUE_OF_SORT_ARRAY,
+  MIN_LENGTH_SORT_ARRAY,
+  MIN_VALUE_OF_SORT_ARRAY,
+} from "../../constants/thresholds-values";
+import { DELAY_IN_MS } from "../../constants/delays";
 
 export const SortingPage: React.FC = () => {
   const [steps, setSteps] = useState<LettersStep<number>[]>([]);
@@ -24,7 +31,12 @@ export const SortingPage: React.FC = () => {
     () => {
       setSteps([
         {
-          letters: getRandArray(17, 3, 100, 0),
+          letters: getRandArray(
+            MAX_LENGTH_SORT_ARRAY,
+            MIN_LENGTH_SORT_ARRAY,
+            MAX_VALUE_OF_SORT_ARRAY,
+            MIN_VALUE_OF_SORT_ARRAY
+          ),
           index: [],
           state: ElementStates.Default,
         },
@@ -35,14 +47,16 @@ export const SortingPage: React.FC = () => {
   );
 
   useEffect(() => {
+    let animationTimeoutId: NodeJS.Timeout | undefined;
     if (steps.length === 1 || stepsIndex >= steps.length) {
       setIsLoading({ isLoading: false, type: "" });
+      clearTimeout(animationTimeoutId);
       return;
     }
     setCurrentStep(steps[stepsIndex]);
-    setTimeout(() => {
+    animationTimeoutId = setTimeout(() => {
       setStepsIndex(stepsIndex + 1);
-    }, 1000);
+    }, DELAY_IN_MS);
   }, [steps, currentStep, stepsIndex]);
 
   const getRandArray = (
@@ -64,7 +78,12 @@ export const SortingPage: React.FC = () => {
     setStepsIndex(0);
     setSteps([
       {
-        letters: getRandArray(17, 3, 100, 0),
+        letters: getRandArray(
+          MAX_LENGTH_SORT_ARRAY,
+          MIN_LENGTH_SORT_ARRAY,
+          MAX_VALUE_OF_SORT_ARRAY,
+          MIN_VALUE_OF_SORT_ARRAY
+        ),
         index: [],
         state: ElementStates.Default,
       },
@@ -113,7 +132,7 @@ export const SortingPage: React.FC = () => {
           }
         }
         break;
-      case "buble":
+      case "bubble":
         for (let i = 0; i < numbers.length; i++) {
           for (let j = 0; j < numbers.length - i - 1; j++) {
             sortingSteps.push({
@@ -139,7 +158,6 @@ export const SortingPage: React.FC = () => {
             }
           }
         }
-        console.log(sortingSteps);
         break;
       default:
         break;
@@ -179,7 +197,7 @@ export const SortingPage: React.FC = () => {
               onClick={() =>
                 sortingChoice(
                   "ascending",
-                  sortChoice === true ? "choice" : "buble"
+                  sortChoice === true ? "choice" : "bubble"
                 )
               }
             />
@@ -193,7 +211,7 @@ export const SortingPage: React.FC = () => {
               onClick={() =>
                 sortingChoice(
                   "descending",
-                  sortChoice === true ? "choice" : "buble"
+                  sortChoice === true ? "choice" : "bubble"
                 )
               }
             />

@@ -5,8 +5,10 @@ import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
-import { Stack } from "../../utils/stack";
+import { Stack } from "./utils";
 import { IInput } from "../../types";
+import { MAX_CIRCLE_WORD_LENGTH } from "../../constants/thresholds-values";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 const stackC = new Stack<string>([]);
 
@@ -20,18 +22,22 @@ export const StackPage: React.FC = () => {
   const [activeRemove, setActiveRemove] = useState<boolean>(false);
 
   useEffect(() => {
+    let animationAddTimeoutId: NodeJS.Timeout | undefined;
+    let animationRemoveTimeoutId: NodeJS.Timeout | undefined;
     if (!activeAdd && !activeRemove) {
+      clearTimeout(animationAddTimeoutId);
+      clearTimeout(animationRemoveTimeoutId);
       return;
     }
     if (activeAdd) {
-      setTimeout(() => {
+      animationAddTimeoutId = setTimeout(() => {
         setActiveAdd(false);
-      }, 500);
+      }, SHORT_DELAY_IN_MS);
     }
     if (activeRemove) {
-      setTimeout(() => {
+      animationRemoveTimeoutId = setTimeout(() => {
         removeFromStack();
-      }, 500);
+      }, SHORT_DELAY_IN_MS);
     }
     // eslint-disable-next-line
   }, [activeAdd, activeRemove]);
@@ -71,7 +77,7 @@ export const StackPage: React.FC = () => {
         <div className={stackClass.containerInput}>
           <form className={stackClass.mainInput} onSubmit={addToStack}>
             <Input
-              maxLength={4}
+              maxLength={MAX_CIRCLE_WORD_LENGTH}
               isLimitText
               type="text"
               name="lettersInput"

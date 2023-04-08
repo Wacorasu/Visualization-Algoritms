@@ -4,10 +4,12 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
-import { getSteps } from "../../utils/string";
+import { getSteps } from "./utils";
 import { LettersStep } from "../../types/string";
 import { ElementStates } from "../../types/element-states";
 import { IInput } from "../../types";
+import { DELAY_IN_MS } from "../../constants/delays";
+import { MAX_STRING_LENGTH } from "../../constants/thresholds-values";
 
 export const StringComponent: React.FC = () => {
   const [formValue, setFromValue] = useState<IInput>({
@@ -20,13 +22,17 @@ export const StringComponent: React.FC = () => {
   const [stepsIndex, setStepsIndex] = useState<number>(0);
 
   useEffect(() => {
+    const animationTimeoutId: NodeJS.Timeout = setTimeout(() => {
+      setStepsIndex(stepsIndex + 1);
+    }, DELAY_IN_MS);
+    if (stepsIndex >= steps.length) {
+      setFromValue({ inputData: "" });
+    }
     if (steps.length === 0 || stepsIndex >= steps.length) {
+      clearTimeout(animationTimeoutId);
       return;
     }
     setCurrentStep(steps[stepsIndex]);
-    setTimeout(() => {
-      setStepsIndex(stepsIndex + 1);
-    }, 2000);
   }, [steps, currentStep, stepsIndex]);
 
   const getReverseString = (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,7 +49,7 @@ export const StringComponent: React.FC = () => {
       <div className={string.pageContainer}>
         <form className={string.containerInput} onSubmit={getReverseString}>
           <Input
-            maxLength={11}
+            maxLength={MAX_STRING_LENGTH}
             isLimitText
             name="lettersInput"
             value={formValue.inputData}
@@ -82,7 +88,7 @@ export const StringComponent: React.FC = () => {
                   stateClass = ElementStates.Modified;
                 }
               }
-              return <Circle letter={element} state={stateClass} />;
+              return <Circle letter={element} state={stateClass} key={index} />;
             })}
         </div>
       </div>

@@ -5,9 +5,17 @@ import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
-import { LinkedList } from "../../utils/list";
+import { LinkedList } from "./utils";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { IListAction } from "../../types/list";
+import { DELAY_IN_MS } from "../../constants/delays";
+import {
+  MAX_CIRCLE_WORD_LENGTH,
+  MAX_LIST_LENGTH,
+  START_LIST_LENGTH,
+} from "../../constants/thresholds-values";
+import { HEAD, TAIL } from "../../constants/element-captions";
+import { JsxElement } from "typescript";
 
 const list = new LinkedList<string>();
 
@@ -40,21 +48,25 @@ export const ListPage: React.FC = () => {
   const [step, setStep] = useState<number>(0);
 
   useEffect(() => {
+    let animationAddTimeoutId: NodeJS.Timeout | undefined;
+    let animationRemoveTimeoutId: NodeJS.Timeout | undefined;
     if (!activeAdd && !activeRemove) {
+      clearTimeout(animationAddTimeoutId);
+      clearTimeout(animationRemoveTimeoutId);
       return;
     }
     if (activeAdd.isActive) {
-      setTimeout(() => {
+      animationAddTimeoutId = setTimeout(() => {
         setStep(step + 1);
-      }, 1000);
+      }, DELAY_IN_MS);
     }
     if (activeAdd.steps && step > activeAdd.steps) {
       setActiveAdd(initialActiveData);
     }
     if (activeRemove.isActive) {
-      setTimeout(() => {
+      animationRemoveTimeoutId = setTimeout(() => {
         setStep(step + 1);
-      }, 1000);
+      }, DELAY_IN_MS);
     }
 
     if (activeRemove.steps && step > activeRemove.steps) {
@@ -65,7 +77,7 @@ export const ListPage: React.FC = () => {
 
   useEffect(() => {
     list.clear();
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < START_LIST_LENGTH; i++) {
       list.append(`${Math.floor(Math.random() * 10)}`);
     }
     setListPrint(list.print());
@@ -106,11 +118,11 @@ export const ListPage: React.FC = () => {
 
   const removeHead = (): void => {
     list.removeHead();
-    setStep(0);
+    setStep(1);
     setActiveRemove({
       ...initialActiveData,
       isActive: true,
-      steps: 1,
+      steps: 2,
       initialMassive: listPrint,
       activeIndex: 0,
     });
@@ -154,7 +166,7 @@ export const ListPage: React.FC = () => {
     setActiveRemove({
       ...initialActiveData,
       isActive: true,
-      steps: formValue.inputIndex + 1,
+      steps: formValue.inputIndex + 2,
       targetData: formValue.inputData,
       initialMassive: listPrint,
       activeIndex: formValue.inputIndex,
@@ -163,13 +175,56 @@ export const ListPage: React.FC = () => {
     setListPrint(list.print());
   };
 
+  const getRemoveData = (
+    index: number,
+    element: string
+  ): { state: ElementStates; tail: string | JSX.Element; letter: string } => {
+    let circle = (
+      <Circle letter={`${element}`} state={ElementStates.Changing} isSmall />
+    );
+    let currentIndex;
+    let state;
+    let tail;
+    let letter;
+    if (activeRemove.isTail) {
+      currentIndex = activeRemove.initialMassive.length - 1;
+      state = ElementStates.Default;
+      if (currentIndex === index) {
+        tail = circle;
+      } else if (activeRemove.initialMassive.length - 1 === index) {
+        tail = TAIL;
+      } else tail = "";
+      if (index === activeRemove.activeIndex && index === currentIndex) {
+        letter = "";
+      } else letter = `${element}`;
+    } else {
+      currentIndex = activeRemove.activeIndex;
+      if (
+        activeRemove.activeIndex &&
+        step >= index &&
+        step <= activeRemove.activeIndex
+      ) {
+        state = ElementStates.Changing;
+      } else state = ElementStates.Default;
+      if (currentIndex === index && index < step) {
+        tail = circle;
+      } else if (activeRemove.initialMassive.length - 1 === index) {
+        tail = TAIL;
+      } else tail = "";
+      if (index === activeRemove.activeIndex && index < step) {
+        letter = "";
+      } else letter = `${element}`;
+    }
+    return { state, tail, letter };
+  };
+
   return (
     <SolutionLayout title="Связный список">
       <div className={listClass.pageContainer}>
         <div className={listClass.containerInput}>
           <form className={listClass.mainInput} onSubmit={addToHead}>
             <Input
-              maxLength={4}
+              maxLength={MAX_CIRCLE_WORD_LENGTH}
               isLimitText
               type="text"
               name="lettersInput"
@@ -192,7 +247,7 @@ export const ListPage: React.FC = () => {
               disabled={
                 formValue.inputData.length === 0 ||
                 activeRemove.isActive ||
-                listPrint.length > 6 ||
+                listPrint.length > MAX_LIST_LENGTH ||
                 activeAdd.isTail ||
                 activeAdd.isActiveAt
               }
@@ -209,7 +264,7 @@ export const ListPage: React.FC = () => {
                 (formValue.inputData.length === 0 ||
                   activeRemove.isActive ||
                   activeAdd.isActive ||
-                  listPrint.length > 6) &&
+                  listPrint.length > MAX_LIST_LENGTH) &&
                 !activeAdd.isTail
               }
             />
@@ -220,14 +275,16 @@ export const ListPage: React.FC = () => {
               isLoader={
                 activeRemove.isActive &&
                 !activeRemove.isTail &&
-                !activeAdd.isActiveAt
+                !activeAdd.isActiveAt &&
+                !activeRemove
               }
               extraClass={listClass.inputButtonSmall}
               disabled={
                 listPrint.length === 0 ||
                 activeAdd.isActive ||
                 0 === listPrint.length - 1 ||
-                activeRemove.isTail
+                activeRemove.isTail ||
+                activeRemove.isActive
               }
             />
             <Button
@@ -247,9 +304,8 @@ export const ListPage: React.FC = () => {
           </form>
           <form className={listClass.mainInput} onSubmit={addAt}>
             <Input
-              maxLength={4}
-              max={listPrint.length - 1}
               isLimitText
+              max={listPrint.length - 1}
               placeholder="Введите индекс"
               type="number"
               name="lettersInput"
@@ -266,7 +322,12 @@ export const ListPage: React.FC = () => {
               text="Добавить по индексу"
               type="submit"
               isLoader={activeAdd.isActive && activeAdd.isActiveAt}
-              disabled={formValue.inputIndex < 0 || activeRemove.isActive}
+              disabled={
+                formValue.inputIndex < 0 ||
+                activeRemove.isActive ||
+                !(listPrint.length > formValue.inputIndex) ||
+                formValue.inputData.length === 0
+              }
               extraClass={listClass.inputButtonBig}
             />
             <Button
@@ -274,7 +335,11 @@ export const ListPage: React.FC = () => {
               type="button"
               onClick={() => removeAt()}
               isLoader={activeRemove.isActive && activeRemove.isActiveAt}
-              disabled={formValue.inputIndex < 0 || activeAdd.isActive}
+              disabled={
+                formValue.inputIndex < 0 ||
+                activeAdd.isActive ||
+                !(listPrint.length > formValue.inputIndex)
+              }
               extraClass={listClass.inputButtonBig}
             />
           </form>
@@ -296,21 +361,20 @@ export const ListPage: React.FC = () => {
                   currentIndex = step;
                 }
                 return (
-                  <>
+                  <div key={index} className={listClass.containerOutput}>
                     <Circle
                       letter={`${element}`}
                       index={index}
-                      key={index}
                       tail={
                         activeAdd.initialMassive.length - 1 === index
-                          ? "tail"
+                          ? TAIL
                           : ""
                       }
                       head={
                         currentIndex === index
                           ? circle
                           : index === 0
-                          ? "head"
+                          ? HEAD
                           : ""
                       }
                       state={
@@ -322,53 +386,25 @@ export const ListPage: React.FC = () => {
                     {index < activeAdd.initialMassive.length - 1 && (
                       <ArrowIcon />
                     )}
-                  </>
+                  </div>
                 );
               })
             : activeRemove.steps && step < activeRemove.steps
             ? activeRemove.initialMassive.map((element, index) => {
-                let circle = (
-                  <Circle
-                    letter={`${element}`}
-                    state={ElementStates.Changing}
-                    isSmall
-                  />
-                );
-                let currentIndex;
-                if (activeRemove.isTail) {
-                  currentIndex = activeRemove.initialMassive.length - 1;
-                } else {
-                  currentIndex = step;
-                }
+                const { letter, tail, state } = getRemoveData(index, element);
                 return (
-                  <>
+                  <div key={index} className={listClass.containerOutput}>
                     <Circle
-                      letter={
-                        index === activeRemove.activeIndex &&
-                        index === currentIndex
-                          ? ""
-                          : `${element}`
-                      }
-                      index={index !== currentIndex ? index : undefined}
-                      key={index}
-                      tail={
-                        currentIndex === index
-                          ? circle
-                          : activeRemove.initialMassive.length - 1 === index
-                          ? "tail"
-                          : ""
-                      }
-                      head={index === 0 ? "head" : ""}
-                      state={
-                        index < step
-                          ? ElementStates.Changing
-                          : ElementStates.Default
-                      }
+                      letter={letter}
+                      index={index}
+                      tail={tail}
+                      head={index === 0 ? HEAD : ""}
+                      state={state}
                     />
                     {index < activeRemove.initialMassive.length - 1 && (
                       <ArrowIcon />
                     )}
-                  </>
+                  </div>
                 );
               })
             : listPrint.map((element, index) => {
@@ -379,13 +415,12 @@ export const ListPage: React.FC = () => {
                   currentIndex = activeAdd.activeIndex;
                 }
                 return (
-                  <>
+                  <div key={index} className={listClass.containerOutput}>
                     <Circle
                       letter={`${element}`}
                       index={index}
-                      key={index}
-                      tail={listPrint.length - 1 === index ? "tail" : ""}
-                      head={0 === index ? "head" : ""}
+                      tail={listPrint.length - 1 === index ? TAIL : ""}
+                      head={0 === index ? HEAD : ""}
                       state={
                         currentIndex !== null && currentIndex === index
                           ? ElementStates.Modified
@@ -393,7 +428,7 @@ export const ListPage: React.FC = () => {
                       }
                     />
                     {index < listPrint.length - 1 && <ArrowIcon />}
-                  </>
+                  </div>
                 );
               })}
         </div>

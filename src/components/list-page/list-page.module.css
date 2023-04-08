@@ -46,3 +46,9 @@
   align-items: center;
   flex-wrap: wrap;
 }
+
+.containerOutput{
+  display: flex;
+  gap: 21px;
+  align-items: center;
+}

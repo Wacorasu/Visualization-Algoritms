@@ -4,6 +4,9 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { MAX_FIBONACCI_NUMBER } from "../../constants/thresholds-values";
+import { getFibonacciNumbers } from "./utils";
 
 export const FibonacciPage: React.FC = () => {
   const [formValue, setFromValue] = useState<{
@@ -19,10 +22,7 @@ export const FibonacciPage: React.FC = () => {
   const [step, setStep] = useState<number>(1);
 
   useEffect(() => {
-    if (formValue.currentSteps.length >= formValue.outputNumbers.length - 1) {
-      return;
-    }
-    setTimeout(() => {
+    const animationTimeoutId: NodeJS.Timeout = setTimeout(() => {
       setFromValue({
         ...formValue,
         currentSteps: [
@@ -31,20 +31,21 @@ export const FibonacciPage: React.FC = () => {
         ],
       });
       setStep(step + 1);
-    }, 500);
-    console.log(step);
+    }, SHORT_DELAY_IN_MS);
+    if (formValue.currentSteps.length >= formValue.outputNumbers.length - 1) {
+      clearTimeout(animationTimeoutId);
+      return;
+    }
   }, [formValue, step]);
 
   const getFibonacciString = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const n: number = Number(formValue.inputNumber);
-    const numberList: Array<number> = [0, 1];
-    if (typeof n === "number") {
-      for (let i = 2; i < n + 2; i++) {
-        numberList.push(numberList[i - 2] + numberList[i - 1]);
-      }
-    }
-    setFromValue({ ...formValue, outputNumbers: numberList, currentSteps: [] });
+    setFromValue({
+      ...formValue,
+      outputNumbers: getFibonacciNumbers(n),
+      currentSteps: [],
+    });
     setStep(1);
   };
 
@@ -53,9 +54,8 @@ export const FibonacciPage: React.FC = () => {
       <div className={string.pageContainer}>
         <form className={string.containerInput} onSubmit={getFibonacciString}>
           <Input
-            maxLength={19}
             isLimitText
-            max={19}
+            max={MAX_FIBONACCI_NUMBER}
             type="number"
             name="lettersInput"
             value={formValue.inputNumber}
@@ -71,7 +71,7 @@ export const FibonacciPage: React.FC = () => {
           />
         </form>
         <div className={string.containerCircle}>
-          {formValue.currentSteps &&
+          {formValue.currentSteps.length > 0 &&
             formValue.currentSteps.map((element, index) => {
               return <Circle letter={`${element}`} index={index} key={index} />;
             })}

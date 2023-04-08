@@ -5,9 +5,11 @@ import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
-import { Queue } from "../../utils/queue";
-import { NodeQueue } from "../../utils/queue";
+import { Queue } from "./utils";
+import { NodeQueue } from "./utils";
 import { IInput } from "../../types";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { MAX_CIRCLE_WORD_LENGTH } from "../../constants/thresholds-values";
 
 const initialState: NodeQueue<string>[] = [
   { letter: "", index: null },
@@ -19,7 +21,7 @@ const initialState: NodeQueue<string>[] = [
   { letter: "", index: null },
 ];
 
-const queueC = new Queue<string>([...initialState]);
+const queueC = new Queue<string>(initialState);
 
 export const QueuePage: React.FC = () => {
   const [formValue, setFromValue] = useState<IInput>({
@@ -32,18 +34,22 @@ export const QueuePage: React.FC = () => {
   const [activeRemove, setActiveRemove] = useState<boolean>(false);
 
   useEffect(() => {
+    let animationAddTimeoutId: NodeJS.Timeout | undefined;
+    let animationRemoveTimeoutId: NodeJS.Timeout | undefined;
     if (!activeAdd && !activeRemove) {
+      clearTimeout(animationAddTimeoutId);
+      clearTimeout(animationRemoveTimeoutId);
       return;
     }
     if (activeAdd) {
-      setTimeout(() => {
+      animationAddTimeoutId = setTimeout(() => {
         setActiveAdd(false);
-      }, 500);
+      }, SHORT_DELAY_IN_MS);
     }
     if (activeRemove) {
-      setTimeout(() => {
+      animationRemoveTimeoutId = setTimeout(() => {
         dequeue();
-      }, 500);
+      }, SHORT_DELAY_IN_MS);
     }
     // eslint-disable-next-line
   }, [activeAdd, activeRemove]);
@@ -70,7 +76,7 @@ export const QueuePage: React.FC = () => {
   };
 
   const setClear = (): void => {
-    queueC.clear([...initialState]);
+    queueC.clear(initialState);
     setQueue(queueC.getQueue());
     setFromValue({ inputData: "" });
     setActiveAdd(false);
@@ -84,7 +90,7 @@ export const QueuePage: React.FC = () => {
         <div className={queueClass.containerInput}>
           <form className={queueClass.mainInput} onSubmit={enqueue}>
             <Input
-              maxLength={4}
+              maxLength={MAX_CIRCLE_WORD_LENGTH}
               isLimitText
               type="text"
               name="lettersInput"
@@ -114,7 +120,7 @@ export const QueuePage: React.FC = () => {
               isLoader={activeRemove}
               disabled={
                 activeAdd ||
-                head < 0 ||
+                queueC.getHead() < 0 ||
                 (head === tail && queue[head]?.index === null)
               }
               extraClass={queueClass.inputField}
@@ -125,7 +131,7 @@ export const QueuePage: React.FC = () => {
             type="button"
             isLoader={false}
             onClick={() => setClear()}
-            disabled={activeAdd || head < 0}
+            disabled={activeAdd || queueC.getHead() < 0}
           />
         </div>
         <div className={queueClass.containerCircle}>

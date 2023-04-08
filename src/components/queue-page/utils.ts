@@ -22,7 +22,7 @@ export class Queue<T> implements IQueue<T> {
   private tail: number;
 
   constructor(queue: NodeQueue<T>[]) {
-    this.queue = queue;
+    this.queue = [...queue];
     this.head = -1;
     this.tail = -1;
   }
@@ -35,7 +35,6 @@ export class Queue<T> implements IQueue<T> {
       this.head = this.head + 1;
     }
     this.queue[this.tail] = { letter: element, index: this.tail };
-    console.log(this.queue);
   }
 
   dequeue() {
@@ -43,14 +42,12 @@ export class Queue<T> implements IQueue<T> {
     if (this.tail > this.head) {
       this.head = this.head + 1;
     }
-    console.log(this.tail, this.head);
   }
 
   clear(init: NodeQueue<T>[]) {
     this.head = -1;
     this.tail = -1;
-    this.queue = init;
-    console.log(this.queue, init);
+    this.queue = [...init];
   }
 
   getTail() {

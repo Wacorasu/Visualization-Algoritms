@@ -1,5 +1,5 @@
-import { LettersStep } from "../types/string";
-import { ElementStates } from "../types/element-states";
+import { LettersStep } from "../../types/string";
+import { ElementStates } from "../../types/element-states";
 
 export const getSteps = (source: string): LettersStep<string>[] => {
   const letters = source.split("");
@@ -34,7 +34,5 @@ export const getSteps = (source: string): LettersStep<string>[] => {
     leftIndex++;
     rightIndex--;
   }
-
-  console.log(steps);
   return steps;
 };

@@ -1,0 +1,38 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.containerInput {
+  width: 100%;
+  max-width: 829px;
+  display: flex;
+
+  gap: 80px;
+}
+.inputField {
+  width: 100%;
+  max-width: 121px;
+  box-sizing: border-box;
+}
+
+.mainInput {
+  width: 100%;
+  max-width: 630px;
+  display: flex;
+  gap: 12px;
+}
+
+.containerCircle {
+  margin-top: 120px;
+  width: 100%;
+  max-width: 944px;
+  display: flex;
+  width: 100%;
+  gap: 48px 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}

@@ -5,5 +5,5 @@ export const MAX_LIST_LENGTH:number=6;
 export const MAX_LENGTH_SORT_ARRAY:number=17;
 export const MIN_LENGTH_SORT_ARRAY:number=3;
 export const MAX_VALUE_OF_SORT_ARRAY:number=100;
-export const MIN_VALUE_OF_SORT_ARRAY:number=100;
+export const MIN_VALUE_OF_SORT_ARRAY:number=1;
 export const MAX_STRING_LENGTH:number=11;

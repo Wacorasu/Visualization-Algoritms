@@ -14,6 +14,7 @@ import {
   MIN_VALUE_OF_SORT_ARRAY,
 } from "../../constants/thresholds-values";
 import { DELAY_IN_MS } from "../../constants/delays";
+import { sortingMethods } from "./utils";
 
 export const SortingPage: React.FC = () => {
   const [steps, setSteps] = useState<LettersStep<number>[]>([]);
@@ -90,79 +91,10 @@ export const SortingPage: React.FC = () => {
     ]);
   };
 
-  const swap = (
-    arr: Array<number>,
-    firstIndex: number,
-    secondIndex: number
-  ): void => {
-    const temp = arr[firstIndex];
-    arr[firstIndex] = arr[secondIndex];
-    arr[secondIndex] = temp;
-  };
-
-  const sortingChoice = (typeSorting: string, methodSorting: string): void => {
-    let numbers = JSON.parse(JSON.stringify(steps[0].letters));
-    const sortingSteps: LettersStep<number>[] = [];
+  
+  const handleSorting = (typeSorting: string, methodSorting: string): void => {
     setIsLoading({ isLoading: true, type: typeSorting });
-    switch (methodSorting) {
-      case "choice":
-        for (let i = 0; i < numbers.length - 1; i++) {
-          for (let j = i + 1; j < numbers.length; j++) {
-            sortingSteps.push({
-              letters: [...numbers],
-              index: [i, j],
-              state: ElementStates.Changing,
-            });
-            if (numbers[i] > numbers[j] && typeSorting === "ascending") {
-              swap(numbers, i, j);
-              sortingSteps.push({
-                letters: [...numbers],
-                index: [i, j],
-                state: ElementStates.Changing,
-              });
-            }
-            if (numbers[i] < numbers[j] && typeSorting === "descending") {
-              swap(numbers, i, j);
-              sortingSteps.push({
-                letters: [...numbers],
-                index: [i, j],
-                state: ElementStates.Changing,
-              });
-            }
-          }
-        }
-        break;
-      case "bubble":
-        for (let i = 0; i < numbers.length; i++) {
-          for (let j = 0; j < numbers.length - i - 1; j++) {
-            sortingSteps.push({
-              letters: [...numbers],
-              index: [j, j + 1, i],
-              state: ElementStates.Changing,
-            });
-            if (numbers[j] > numbers[j + 1] && typeSorting === "ascending") {
-              swap(numbers, j, j + 1);
-              sortingSteps.push({
-                letters: [...numbers],
-                index: [j, j + 1, i],
-                state: ElementStates.Changing,
-              });
-            }
-            if (numbers[j] < numbers[j + 1] && typeSorting === "descending") {
-              swap(numbers, j, j + 1);
-              sortingSteps.push({
-                letters: [...numbers],
-                index: [j, j + 1, i],
-                state: ElementStates.Changing,
-              });
-            }
-          }
-        }
-        break;
-      default:
-        break;
-    }
-
+    const sortingSteps: LettersStep<number>[]  =  sortingMethods(typeSorting, methodSorting, steps[0].letters)
     setCurrentStep(null);
     setStepsIndex(0);
     setSteps([steps[0], ...sortingSteps]);
@@ -195,7 +127,7 @@ export const SortingPage: React.FC = () => {
               isLoader={isLoading.type === "ascending" && isLoading.isLoading}
               disabled={isLoading.type !== "ascending" && isLoading.isLoading}
               onClick={() =>
-                sortingChoice(
+                handleSorting(
                   "ascending",
                   sortChoice === true ? "choice" : "bubble"
                 )
@@ -209,7 +141,7 @@ export const SortingPage: React.FC = () => {
               isLoader={isLoading.type === "descending" && isLoading.isLoading}
               disabled={isLoading.type !== "descending" && isLoading.isLoading}
               onClick={() =>
-                sortingChoice(
+                handleSorting(
                   "descending",
                   sortChoice === true ? "choice" : "bubble"
                 )

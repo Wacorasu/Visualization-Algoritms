@@ -77,6 +77,7 @@ export const StackPage: React.FC = () => {
         <div className={stackClass.containerInput}>
           <form className={stackClass.mainInput} onSubmit={addToStack}>
             <Input
+              data-testid="inputStack"
               maxLength={MAX_CIRCLE_WORD_LENGTH}
               isLimitText
               type="text"
@@ -90,6 +91,7 @@ export const StackPage: React.FC = () => {
               }}
             />
             <Button
+              data-testid="buttonStackAdd"
               text="Добавить"
               type="submit"
               isLoader={activeAdd}
@@ -97,6 +99,7 @@ export const StackPage: React.FC = () => {
               extraClass={stackClass.inputField}
             />
             <Button
+              data-testid="buttonStackRemove"
               text="Удалить"
               type="button"
               onClick={() => startRemoveFromStack()}
@@ -106,6 +109,7 @@ export const StackPage: React.FC = () => {
             />
           </form>
           <Button
+            data-testid="buttonStackReset"
             text="Очистить"
             type="button"
             isLoader={false}
@@ -113,7 +117,7 @@ export const StackPage: React.FC = () => {
             disabled={stack.length === 0 || activeAdd || activeRemove}
           />
         </div>
-        <div className={stackClass.containerCircle}>
+        <div data-testid='stackContainer' className={stackClass.containerCircle}>
           {stack &&
             stack.map((element, index) => {
               if (index === step) {

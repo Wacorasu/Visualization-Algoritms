@@ -15,7 +15,7 @@ import {
   START_LIST_LENGTH,
 } from "../../constants/thresholds-values";
 import { HEAD, TAIL } from "../../constants/element-captions";
-import { JsxElement } from "typescript";
+import { LIST_INITIAL_VALUES } from "../../constants/initial-values";
 
 const list = new LinkedList<string>();
 
@@ -78,7 +78,7 @@ export const ListPage: React.FC = () => {
   useEffect(() => {
     list.clear();
     for (let i = 0; i < START_LIST_LENGTH; i++) {
-      list.append(`${Math.floor(Math.random() * 10)}`);
+      list.append(LIST_INITIAL_VALUES[i]);
     }
     setListPrint(list.print());
     // eslint-disable-next-line
@@ -224,6 +224,7 @@ export const ListPage: React.FC = () => {
         <div className={listClass.containerInput}>
           <form className={listClass.mainInput} onSubmit={addToHead}>
             <Input
+              data-testid="inputListData"
               maxLength={MAX_CIRCLE_WORD_LENGTH}
               isLimitText
               type="text"
@@ -238,6 +239,7 @@ export const ListPage: React.FC = () => {
               }}
             />
             <Button
+              data-testid="buttonListAddHead"
               text="Добавить в head"
               type="submit"
               isLoader={
@@ -253,6 +255,7 @@ export const ListPage: React.FC = () => {
               }
             />
             <Button
+              data-testid="buttonListAddTail"
               text="Добавить в tail"
               type="button"
               isLoader={
@@ -269,6 +272,7 @@ export const ListPage: React.FC = () => {
               }
             />
             <Button
+              data-testid="buttonListRemoveHead"
               text="Удалить из head"
               type="button"
               onClick={() => removeHead()}
@@ -288,6 +292,7 @@ export const ListPage: React.FC = () => {
               }
             />
             <Button
+              data-testid="buttonListRemoveTail"
               text="Удалить из tail"
               type="button"
               onClick={() => removeTail()}
@@ -304,6 +309,7 @@ export const ListPage: React.FC = () => {
           </form>
           <form className={listClass.mainInput} onSubmit={addAt}>
             <Input
+              data-testid="inputListIndex"
               isLimitText
               max={listPrint.length - 1}
               placeholder="Введите индекс"
@@ -319,6 +325,7 @@ export const ListPage: React.FC = () => {
               extraClass={listClass.inputField}
             />
             <Button
+              data-testid="buttonListAddOnIndex"
               text="Добавить по индексу"
               type="submit"
               isLoader={activeAdd.isActive && activeAdd.isActiveAt}
@@ -331,6 +338,7 @@ export const ListPage: React.FC = () => {
               extraClass={listClass.inputButtonBig}
             />
             <Button
+              data-testid="buttonListRemoveOnIndex"
               text="Удалить по индексу"
               type="button"
               onClick={() => removeAt()}
@@ -344,7 +352,7 @@ export const ListPage: React.FC = () => {
             />
           </form>
         </div>
-        <div className={listClass.containerCircle}>
+        <div data-testid="circlesList" className={listClass.containerCircle}>
           {activeAdd.steps && step < activeAdd.steps
             ? activeAdd.initialMassive.map((element, index) => {
                 const circle = (

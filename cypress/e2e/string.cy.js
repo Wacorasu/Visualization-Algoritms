@@ -1,17 +1,22 @@
+const inputDataSelector = '[data-testid="inputString"]';
+const buttonAddSelector = '[data-testid="buttonString"]';
+const circlesContainerSelector = '[data-testid="circlesContainer"]';
+const circleBorderSelector = '[data-testid="circleBorder"]';
+
 describe('компонент "строка" работает корректно', function () {
   before(function () {
     cy.visit("/recursion");
   });
 
   it("кнопка должна быть недоступной при пустом инпуте", function () {
-    cy.get('[data-testid="inputString"]').should("contain", "");
-    cy.get('[data-testid="buttonString"]').should("be.disabled");
+    cy.get(inputDataSelector).should("contain", "");
+    cy.get(buttonAddSelector).should("be.disabled");
   });
 
   it("кнопка доступна при не пустом инпуте", function () {
     cy.visit("/recursion");
-    cy.get('[data-testid="inputString"]').type("ABCD");
-    cy.get('[data-testid="buttonString"]').should("be.enabled");
+    cy.get(inputDataSelector).type("ABCD");
+    cy.get(buttonAddSelector).should("be.enabled");
   });
 
   it("строка разворачивается корректно с четным количеством элементов", function () {
@@ -23,13 +28,13 @@ describe('компонент "строка" работает корректно'
     const stateDefault = "rgb(0, 50, 255)";
     const stateChanging = "rgb(210, 82, 225)";
 
-    cy.get('[data-testid="inputString"]').type("ABCD");
-    cy.get('[data-testid="buttonString"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputDataSelector).type("ABCD");
+    cy.get(buttonAddSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     cy.get("@circles").each(($el, index) => {
       cy.get($el)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", stringArraySt1[index])
         .should("have.css", "border", `4px solid ${stateDefault}`);
     });
@@ -37,12 +42,12 @@ describe('компонент "строка" работает корректно'
     cy.get("@circles").each(($el, index) => {
       if (index === 0 || index === stringArraySt1.length - 1) {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt1[index])
           .should("have.css", "border", `4px solid ${stateChanging}`);
       } else {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt1[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
@@ -51,12 +56,12 @@ describe('компонент "строка" работает корректно'
     cy.get("@circles").each(($el, index) => {
       if (index === 0 || index === stringArraySt2.length - 1) {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt2[index])
           .should("have.css", "border", `4px solid ${stateModified}`);
       } else {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt2[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
@@ -65,12 +70,12 @@ describe('компонент "строка" работает корректно'
     cy.get("@circles").each(($el, index) => {
       if (index === 1 || index === stringArraySt2.length - 2) {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt2[index])
           .should("have.css", "border", `4px solid ${stateChanging}`);
       } else {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt2[index])
           .should("have.css", "border", `4px solid ${stateModified}`);
       }
@@ -79,12 +84,12 @@ describe('компонент "строка" работает корректно'
     cy.get("@circles").each(($el, index) => {
       if (index === 1 || index === stringArraySt3.length - 2) {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt3[index])
           .should("have.css", "border", `4px solid ${stateModified}`);
       } else {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt3[index])
           .should("have.css", "border", `4px solid ${stateModified}`);
       }
@@ -100,13 +105,13 @@ describe('компонент "строка" работает корректно'
     const stateDefault = "rgb(0, 50, 255)";
     const stateChanging = "rgb(210, 82, 225)";
 
-    cy.get('[data-testid="inputString"]').type("ABC");
-    cy.get('[data-testid="buttonString"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputDataSelector).type("ABC");
+    cy.get(buttonAddSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     cy.get("@circles").each(($el, index) => {
       cy.get($el)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", stringArraySt1[index])
         .should("have.css", "border", `4px solid ${stateDefault}`);
     });
@@ -114,12 +119,12 @@ describe('компонент "строка" работает корректно'
     cy.get("@circles").each(($el, index) => {
       if (index === 0 || index === stringArraySt1.length - 1) {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt1[index])
           .should("have.css", "border", `4px solid ${stateChanging}`);
       } else {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt1[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
@@ -128,12 +133,12 @@ describe('компонент "строка" работает корректно'
     cy.get("@circles").each(($el, index) => {
       if (index === 0 || index === stringArraySt2.length - 1) {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt2[index])
           .should("have.css", "border", `4px solid ${stateModified}`);
       } else {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt2[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
@@ -142,12 +147,12 @@ describe('компонент "строка" работает корректно'
     cy.get("@circles").each(($el, index) => {
       if (index === 1) {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt2[index])
           .should("have.css", "border", `4px solid ${stateChanging}`);
       } else {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt2[index])
           .should("have.css", "border", `4px solid ${stateModified}`);
       }
@@ -156,12 +161,12 @@ describe('компонент "строка" работает корректно'
     cy.get("@circles").each(($el, index) => {
       if (index === 1) {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt3[index])
           .should("have.css", "border", `4px solid ${stateModified}`);
       } else {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", stringArraySt3[index])
           .should("have.css", "border", `4px solid ${stateModified}`);
       }

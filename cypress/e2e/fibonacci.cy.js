@@ -1,3 +1,7 @@
+const inputSelector = '[data-testid="inputFibonacci"]';
+const buttonSelector = '[data-testid="buttonFibonacci"]';
+const circlesContainerSelector = '[data-testid="circlesContainer"]';
+const circleBorderSelector = '[data-testid="circleBorder"]';
 
 describe('компонент "фибоначчи" работает корректно', function () {
   before(function () {
@@ -5,14 +9,14 @@ describe('компонент "фибоначчи" работает коррек�
   });
 
   it("кнопка должна быть недоступной при пустом инпуте", function () {
-    cy.get('[data-testid="inputFibonacci"]').should("contain", "");
-    cy.get('[data-testid="buttonFibonacci"]').should("be.disabled");
+    cy.get(inputSelector).should("contain", "");
+    cy.get(buttonSelector).should("be.disabled");
   });
 
   it("кнопка доступна при не пустом инпуте", function () {
     cy.visit("/fibonacci");
-    cy.get('[data-testid="inputFibonacci"]').type("2");
-    cy.get('[data-testid="buttonFibonacci"]').should("be.enabled");
+    cy.get(inputSelector).type("2");
+    cy.get(buttonSelector).should("be.enabled");
   });
 
   it("результат разворачивается корректно для значения ввода 0", function () {
@@ -20,13 +24,13 @@ describe('компонент "фибоначчи" работает коррек�
     const inputData = "0";
     const outputData = ["1"];
 
-    cy.get('[data-testid="inputFibonacci"]').type(inputData);
-    cy.get('[data-testid="buttonFibonacci"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputSelector).type(inputData);
+    cy.get(buttonSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     cy.get("@circles").each(($el, index) => {
       cy.get($el)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", outputData[index]);
     });
   });
@@ -36,17 +40,17 @@ describe('компонент "фибоначчи" работает коррек�
     const inputData = "1";
     const outputData = ["1", "1"];
 
-    cy.get('[data-testid="inputFibonacci"]').type(inputData);
-    cy.get('[data-testid="buttonFibonacci"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputSelector).type(inputData);
+    cy.get(buttonSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     cy.get("@circles")
-      .children('[data-testid="circleBorder"]', { timeout: 500*outputData.length })
+      .children(circleBorderSelector, { timeout: 500 * outputData.length })
       .should("have.lengthOf", outputData.length);
 
     cy.get("@circles").each((element, index, mass) => {
       cy.get(element)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", outputData[index]);
     });
   });
@@ -56,17 +60,17 @@ describe('компонент "фибоначчи" работает коррек�
     const inputData = "4";
     const outputData = ["1", "1", "2", "3", "5"];
 
-    cy.get('[data-testid="inputFibonacci"]').type(inputData);
-    cy.get('[data-testid="buttonFibonacci"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputSelector).type(inputData);
+    cy.get(buttonSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     cy.get("@circles")
-      .children('[data-testid="circleBorder"]', { timeout: 500*outputData.length })
+      .children(circleBorderSelector, { timeout: 500 * outputData.length })
       .should("have.lengthOf", outputData.length);
 
     cy.get("@circles").each(($el, index) => {
       cy.get($el)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", outputData[index]);
     });
   });
@@ -97,17 +101,17 @@ describe('компонент "фибоначчи" работает коррек�
       "6765",
     ];
 
-    cy.get('[data-testid="inputFibonacci"]').type(inputData);
-    cy.get('[data-testid="buttonFibonacci"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputSelector).type(inputData);
+    cy.get(buttonSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     cy.get("@circles")
-      .children('[data-testid="circleBorder"]', { timeout: 500*outputData.length })
+      .children(circleBorderSelector, { timeout: 500 * outputData.length })
       .should("have.lengthOf", outputData.length);
 
     cy.get("@circles").each(($el, index) => {
       cy.get($el)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", outputData[index]);
     });
   });

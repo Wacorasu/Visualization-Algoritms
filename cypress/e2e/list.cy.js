@@ -1,3 +1,18 @@
+const inputDataSelector = '[data-testid="inputListData"]';
+const inputIndexSelector = '[data-testid="inputListIndex"]';
+const buttonAddHeadSelector = '[data-testid="buttonListAddHead"]';
+const buttonAddTailSelector = '[data-testid="buttonListAddTail"]';
+const buttonRemoveHeadSelector = '[data-testid="buttonListRemoveHead"]';
+const buttonRemoveTailSelector = '[data-testid="buttonListRemoveTail"]';
+const buttonAddOnIndexSelector = '[data-testid="buttonListAddOnIndex"]';
+const buttonRemoveOnIndex = '[data-testid="buttonListRemoveOnIndex"]';
+const circlesContainerSelector = '[data-testid="circlesContainer"]';
+const smallCirclesContainerSelector =
+  '[data-testid="circlesContainerHeadTail"]';
+const circleBorderSelector = '[data-testid="circleBorder"]';
+const circleHeadSelector = '[data-testid="circlesHead"]';
+const circleTailSelector = '[data-testid="circlesTail"]';
+
 const displayStep = ({
   el,
   elHead,
@@ -17,105 +32,106 @@ const displayStep = ({
   outputDataThree = outputDataTwo,
   add,
   steps,
-  start= headOne, 
+  start = headOne,
 }) => {
- 
   cy.get(elHead)
-    .children('[data-testid="circlesContainerHeadTail"]')
-    .children('[data-testid="circleBorder"]')
+    .children(smallCirclesContainerSelector)
+    .children(circleBorderSelector)
     .should("contain", inputData)
     .should("have.css", "border", `4px solid ${stateC}`)
     .as("circleTarget");
 
   cy.get(el).each(($el, index, mas) => {
-    if (index>start){if (index === indexAdd && headOne === indexAdd && add) {
-      cy.get($el)
-        .should("contain", "")
-        .should("not.contain", "tail")
-        .children('[data-testid="circleBorder"]')
-        .should("have.css", "border", `4px solid ${stateD}`)
-        .should("contain", outputDataOne[index]);
-    } else if (index === indexAdd && headOne === indexAdd && !add) {
-      cy.get($el)
-        .should("contain", "head")
-        .should("contain", "")
-        .children('[data-testid="circleBorder"]')
-        .should("have.css", "border", `4px solid ${stateD}`)
-        .should("contain", outputDataOne[index]);
-    } else if (index === headOne && headOne !== indexAdd) {
-      cy.get($el)
-        .should("contain", "head")
-        .should("not.contain", "tail")
-        .children('[data-testid="circleBorder"]')
-        .should("have.css", "border", `4px solid ${stateD}`)
-        .should("contain", outputDataOne[index]);
-    } else if (index === tailOne && indexAdd === tailOne && add) {
-      cy.get($el)
-        .should("contain", "")
-        .should("contain", "tail")
-        .children('[data-testid="circleBorder"]')
-        .should("have.css", "border", `4px solid ${stateD}`)
-        .should("contain", outputDataOne[index]);
-    } else if (index === tailOne && indexAdd === tailOne && !add) {
-      cy.get($el)
-        .should("not.contain", "head")
-        .should("contain", "")
-        .children('[data-testid="circleBorder"]')
-        .should("have.css", "border", `4px solid ${stateD}`)
-        .should("contain", outputDataOne[index]);
-    } else if (index === tailOne && indexAdd !== tailOne) {
-      cy.get($el)
-        .should("not.contain", "head")
-        .should("contain", "tail")
-        .children('[data-testid="circleBorder"]')
-        .should("have.css", "border", `4px solid ${stateD}`)
-        .should("contain", outputDataOne[index]);
-    } else if (
-      index === indexAdd &&
-      index !== headOne &&
-      index !== tailOne &&
-      add
-    ) {
-      cy.get($el)
-        .should("contain", "")
-        .should("not.contain", "tail")
-        .children('[data-testid="circleBorder"]')
-        .should("have.css", "border", `4px solid ${stateD}`)
-        .should("contain", outputDataOne[index]);
-    } else if (
-      index === indexAdd &&
-      index !== headOne &&
-      index !== tailOne &&
-      !add
-    ) {
-      cy.get($el)
-        .should("not.contain", "head")
-        .should("contain", "")
-        .children('[data-testid="circleBorder"]')
-        .should("have.css", "border", `4px solid ${stateD}`)
-        .should("contain", outputDataOne[index]);
-    } else if (index !== headOne && index !== tailOne && index !== indexAdd) {
-      cy.get($el)
-        .should("not.contain", "head")
-        .should("not.contain", "tail")
-        .children('[data-testid="circleBorder"]')
-        .should("have.css", "border", `4px solid ${stateD}`)
-        .should("contain", outputDataOne[index]);
-    }}
+    if (index > start) {
+      if (index === indexAdd && headOne === indexAdd && add) {
+        cy.get($el)
+          .should("contain", "")
+          .should("not.contain", "tail")
+          .children(circleBorderSelector)
+          .should("have.css", "border", `4px solid ${stateD}`)
+          .should("contain", outputDataOne[index]);
+      } else if (index === indexAdd && headOne === indexAdd && !add) {
+        cy.get($el)
+          .should("contain", "head")
+          .should("contain", "")
+          .children(circleBorderSelector)
+          .should("have.css", "border", `4px solid ${stateD}`)
+          .should("contain", outputDataOne[index]);
+      } else if (index === headOne && headOne !== indexAdd) {
+        cy.get($el)
+          .should("contain", "head")
+          .should("not.contain", "tail")
+          .children(circleBorderSelector)
+          .should("have.css", "border", `4px solid ${stateD}`)
+          .should("contain", outputDataOne[index]);
+      } else if (index === tailOne && indexAdd === tailOne && add) {
+        cy.get($el)
+          .should("contain", "")
+          .should("contain", "tail")
+          .children(circleBorderSelector)
+          .should("have.css", "border", `4px solid ${stateD}`)
+          .should("contain", outputDataOne[index]);
+      } else if (index === tailOne && indexAdd === tailOne && !add) {
+        cy.get($el)
+          .should("not.contain", "head")
+          .should("contain", "")
+          .children(circleBorderSelector)
+          .should("have.css", "border", `4px solid ${stateD}`)
+          .should("contain", outputDataOne[index]);
+      } else if (index === tailOne && indexAdd !== tailOne) {
+        cy.get($el)
+          .should("not.contain", "head")
+          .should("contain", "tail")
+          .children(circleBorderSelector)
+          .should("have.css", "border", `4px solid ${stateD}`)
+          .should("contain", outputDataOne[index]);
+      } else if (
+        index === indexAdd &&
+        index !== headOne &&
+        index !== tailOne &&
+        add
+      ) {
+        cy.get($el)
+          .should("contain", "")
+          .should("not.contain", "tail")
+          .children(circleBorderSelector)
+          .should("have.css", "border", `4px solid ${stateD}`)
+          .should("contain", outputDataOne[index]);
+      } else if (
+        index === indexAdd &&
+        index !== headOne &&
+        index !== tailOne &&
+        !add
+      ) {
+        cy.get($el)
+          .should("not.contain", "head")
+          .should("contain", "")
+          .children(circleBorderSelector)
+          .should("have.css", "border", `4px solid ${stateD}`)
+          .should("contain", outputDataOne[index]);
+      } else if (index !== headOne && index !== tailOne && index !== indexAdd) {
+        cy.get($el)
+          .should("not.contain", "head")
+          .should("not.contain", "tail")
+          .children(circleBorderSelector)
+          .should("have.css", "border", `4px solid ${stateD}`)
+          .should("contain", outputDataOne[index]);
+      }
+    }
   });
   cy.get(el)
-    .children('[data-testid="circleBorder"]', {
+    .children(circleBorderSelector, {
       timeout: 1000 * outputDataTwo.length,
     })
     .should("have.lengthOf", outputDataTwo.length);
   cy.get(el).each(($el, index) => {
     if (index === indexAdd && add) {
       cy.get($el)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("have.css", "border", `4px solid ${stateM}`);
     } else {
       cy.get($el)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("have.css", "border", `4px solid ${stateD}`);
     }
     if (index === headTwo && headTwo === indexAdd) {
@@ -151,7 +167,7 @@ const displayStep = ({
     }
   });
   cy.get(el)
-    .children('[data-testid="circleBorder"]', {
+    .children(circleBorderSelector, {
       timeout: 1000 * outputDataTwo.length,
     })
     .should("have.lengthOf", outputDataThree.length);
@@ -160,21 +176,21 @@ const displayStep = ({
       cy.get($el)
         .should("contain", "head")
         .should("not.contain", "tail")
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("have.css", "border", `4px solid ${stateD}`)
         .should("contain", outputDataThree[index]);
     } else if (index === tailThree) {
       cy.get($el)
         .should("not.contain", "head")
         .should("contain", "tail")
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("have.css", "border", `4px solid ${stateD}`)
         .should("contain", outputDataThree[index]);
     } else {
       cy.get($el)
         .should("not.contain", "head")
         .should("not.contain", "tail")
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("have.css", "border", `4px solid ${stateD}`)
         .should("contain", outputDataThree[index]);
     }
@@ -203,24 +219,24 @@ const displayStepIndex = ({
   cy.get(el).each(($el, index, mas) => {
     if (add) {
       cy.get(elHead)
-        .children('[data-testid="circlesContainerHeadTail"]')
-        .children('[data-testid="circleBorder"]')
+        .children(smallCirclesContainerSelector)
+        .children(circleBorderSelector)
         .should("contain", inputData)
         .should("have.css", "border", `4px solid ${stateC}`)
         .as("circleTarget");
     }
-    
+
     if (index < indexAdd && add) {
       cy.get($el)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("have.css", "border", `4px solid ${stateC}`);
     } else if (index <= indexAdd && !add) {
       cy.get($el)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("have.css", "border", `4px solid ${stateC}`);
     } else {
       cy.get($el)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("have.css", "border", `4px solid ${stateD}`);
     }
   });
@@ -261,7 +277,7 @@ const displayStepIndex = ({
       outputDataTwo: outputDataTwo,
       inputData: inputData,
       add: add,
-      start: indexAdd
+      start: indexAdd,
     });
   }
 };
@@ -272,11 +288,11 @@ describe('компонент "Связный список" работает ко
   });
 
   it("кнопки добавления и удаления по индексу должны быть недоступны при пустом инпуте", function () {
-    cy.get('[data-testid="inputListData"]').should("contain", "");
-    cy.get('[data-testid="buttonListAddHead"]').should("be.disabled");
-    cy.get('[data-testid="buttonListAddTail"]').should("be.disabled");
-    cy.get('[data-testid="buttonListAddOnIndex"]').should("be.disabled");
-    cy.get('[data-testid="buttonListRemoveOnIndex"]').should("be.disabled");
+    cy.get(inputDataSelector).should("contain", "");
+    cy.get(buttonAddHeadSelector).should("be.disabled");
+    cy.get(buttonAddTailSelector).should("be.disabled");
+    cy.get(buttonAddOnIndexSelector).should("be.disabled");
+    cy.get(buttonRemoveOnIndex).should("be.disabled");
   });
 
   it("начальный список отрисовывается корректно", function () {
@@ -286,28 +302,28 @@ describe('компонент "Связный список" работает ко
     const tail = outputData.length - 1;
     const stateDefault = "rgb(0, 50, 255)";
 
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(circlesContainerSelector).as("circles");
 
     cy.get("@circles").each(($el, index) => {
       if (index === head) {
         cy.get($el)
           .should("contain", "head")
           .should("not.contain", "tail")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("have.css", "border", `4px solid ${stateDefault}`)
           .should("contain", outputData[index]);
       } else if (index === tail) {
         cy.get($el)
           .should("not.contain", "head")
           .should("contain", "tail")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("have.css", "border", `4px solid ${stateDefault}`)
           .should("contain", outputData[index]);
       } else {
         cy.get($el)
           .should("not.contain", "head")
           .should("not.contain", "tail")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("have.css", "border", `4px solid ${stateDefault}`)
           .should("contain", outputData[index]);
       }
@@ -328,10 +344,10 @@ describe('компонент "Связный список" работает ко
     const stateChanging = "rgb(210, 82, 225)";
     const stateModified = "rgb(127, 224, 81)";
 
-    cy.get('[data-testid="inputListData"]').type(inputData);
-    cy.get('[data-testid="buttonListAddHead"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
-    cy.get('[data-testid="circlesHead"]').as("circlesHead");
+    cy.get(inputDataSelector).type(inputData);
+    cy.get(buttonAddHeadSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
+    cy.get(circleHeadSelector).as("circlesHead");
     displayStep({
       el: "@circles",
       elHead: "@circlesHead",
@@ -364,10 +380,10 @@ describe('компонент "Связный список" работает ко
     const stateChanging = "rgb(210, 82, 225)";
     const stateModified = "rgb(127, 224, 81)";
 
-    cy.get('[data-testid="inputListData"]').type(inputData);
-    cy.get('[data-testid="buttonListAddTail"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
-    cy.get('[data-testid="circlesHead"]').as("circlesHead");
+    cy.get(inputDataSelector).type(inputData);
+    cy.get(buttonAddTailSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
+    cy.get(circleHeadSelector).as("circlesHead");
     displayStep({
       el: "@circles",
       elHead: "@circlesHead",
@@ -400,11 +416,11 @@ describe('компонент "Связный список" работает ко
     const stateChanging = "rgb(210, 82, 225)";
     const stateModified = "rgb(127, 224, 81)";
 
-    cy.get('[data-testid="inputListData"]').type(inputData);
-    cy.get('[data-testid="inputListIndex"]').type(indexAdd);
-    cy.get('[data-testid="buttonListAddOnIndex"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
-    cy.get('[data-testid="circlesHead"]').as("circlesHead");
+    cy.get(inputDataSelector).type(inputData);
+    cy.get(inputIndexSelector).type(indexAdd);
+    cy.get(buttonAddOnIndexSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
+    cy.get(circleHeadSelector).as("circlesHead");
     displayStepIndex({
       el: "@circles",
       elHead: "@circlesHead",
@@ -441,9 +457,9 @@ describe('компонент "Связный список" работает ко
     const stateChanging = "rgb(210, 82, 225)";
     const stateModified = "rgb(127, 224, 81)";
 
-    cy.get('[data-testid="buttonListRemoveHead"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
-    cy.get('[data-testid="circlesTail"]').as("circlesTail");
+    cy.get(buttonRemoveHeadSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
+    cy.get(circleTailSelector).as("circlesTail");
     displayStep({
       el: "@circles",
       elHead: "@circlesTail",
@@ -482,9 +498,9 @@ describe('компонент "Связный список" работает ко
     const stateChanging = "rgb(210, 82, 225)";
     const stateModified = "rgb(127, 224, 81)";
 
-    cy.get('[data-testid="buttonListRemoveTail"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
-    cy.get('[data-testid="circlesTail"]').as("circlesTail");
+    cy.get(buttonRemoveTailSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
+    cy.get(circleTailSelector).as("circlesTail");
     displayStep({
       el: "@circles",
       elHead: "@circlesTail",
@@ -523,11 +539,11 @@ describe('компонент "Связный список" работает ко
     const stateChanging = "rgb(210, 82, 225)";
     const stateModified = "rgb(127, 224, 81)";
 
-    cy.get('[data-testid="inputListData"]').type(inputData);
-    cy.get('[data-testid="inputListIndex"]').type(indexAdd);
-    cy.get('[data-testid="buttonListRemoveOnIndex"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
-    cy.get('[data-testid="circlesTail"]').as("circlesTail");
+    cy.get(inputDataSelector).type(inputData);
+    cy.get(inputIndexSelector).type(indexAdd);
+    cy.get(buttonRemoveOnIndex).click();
+    cy.get(circlesContainerSelector).as("circles");
+    cy.get(circleTailSelector).as("circlesTail");
     displayStepIndex({
       el: "@circles",
       elHead: "@circlesTail",

@@ -1,17 +1,25 @@
+const inputDataSelector = '[data-testid="inputStack"]';
+const buttonAddSelector = '[data-testid="buttonStackAdd"]';
+const buttonRemoveSelector = '[data-testid="buttonStackRemove"]';
+const buttonResetSelector = '[data-testid="buttonStackReset"]';
+const circlesContainerSelector = '[data-testid="circlesContainer"]';
+const circleBorderSelector = '[data-testid="circleBorder"]';
+const stackContainerSelector = "[data-testid='stackContainer']";
+
 describe('компонент "стек" работает корректно', function () {
   before(function () {
     cy.visit("/stack");
   });
 
   it("кнопка добавления должна быть недоступной при пустом инпуте", function () {
-    cy.get('[data-testid="inputStack"]').should("contain", "");
-    cy.get('[data-testid="buttonStackAdd"]').should("be.disabled");
+    cy.get(inputDataSelector).should("contain", "");
+    cy.get(buttonAddSelector).should("be.disabled");
   });
 
   it("кнопка доступна при не пустом инпуте", function () {
     cy.visit("/stack");
-    cy.get('[data-testid="inputStack"]').type("2");
-    cy.get('[data-testid="buttonStackAdd"]').should("be.enabled");
+    cy.get(inputDataSelector).type("2");
+    cy.get(buttonAddSelector).should("be.enabled");
   });
 
   it("значение 2 корректно добавляется в начало стека", function () {
@@ -21,21 +29,21 @@ describe('компонент "стек" работает корректно', fu
     const stateDefault = "rgb(0, 50, 255)";
     const stateChanging = "rgb(210, 82, 225)";
 
-    cy.get('[data-testid="inputStack"]').type(inputData);
-    cy.get('[data-testid="buttonStackAdd"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputDataSelector).type(inputData);
+    cy.get(buttonAddSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     cy.get("@circles").each(($el, index) => {
       cy.get($el)
         .should("contain", "Top")
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", outputData[index])
         .should("have.css", "border", `4px solid ${stateChanging}`);
     });
     cy.get("@circles").each(($el, index) => {
       cy.get($el)
         .should("contain", "Top")
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", outputData[index])
         .should("have.css", "border", `4px solid ${stateDefault}`);
     });
@@ -52,39 +60,39 @@ describe('компонент "стек" работает корректно', fu
     const stateDefault = "rgb(0, 50, 255)";
     const stateChanging = "rgb(210, 82, 225)";
 
-    cy.get('[data-testid="inputStack"]').type(inputDataSt1);
-    cy.get('[data-testid="buttonStackAdd"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputDataSelector).type(inputDataSt1);
+    cy.get(buttonAddSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     cy.get("@circles").each(($el, index) => {
       cy.get($el)
         .should("contain", "Top")
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", outputDataSt1[index])
         .should("have.css", "border", `4px solid ${stateChanging}`);
     });
     cy.get("@circles").each(($el, index) => {
       cy.get($el)
         .should("contain", "Top")
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", outputDataSt1[index])
         .should("have.css", "border", `4px solid ${stateDefault}`);
     });
 
-    cy.get('[data-testid="inputStack"]').type(inputDataSt2);
-    cy.get('[data-testid="buttonStackAdd"]').click();
+    cy.get(inputDataSelector).type(inputDataSt2);
+    cy.get(buttonAddSelector).click();
 
     cy.get("@circles").each(($el, index) => {
       if (index === outputDataSt2.length - 1) {
         cy.get($el)
           .should("contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateChanging}`);
       } else {
         cy.get($el)
           .should("not.contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
@@ -93,32 +101,32 @@ describe('компонент "стек" работает корректно', fu
       if (index === outputDataSt2.length - 1) {
         cy.get($el)
           .should("contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       } else {
         cy.get($el)
           .should("not.contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
     });
 
-    cy.get('[data-testid="inputStack"]').type(inputDataSt3);
-    cy.get('[data-testid="buttonStackAdd"]').click();
+    cy.get(inputDataSelector).type(inputDataSt3);
+    cy.get(buttonAddSelector).click();
 
     cy.get("@circles").each(($el, index) => {
       if (index === outputDataSt3.length - 1) {
         cy.get($el)
           .should("contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt3[index])
           .should("have.css", "border", `4px solid ${stateChanging}`);
       } else {
         cy.get($el)
           .should("not.contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt3[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
@@ -127,38 +135,38 @@ describe('компонент "стек" работает корректно', fu
       if (index === outputDataSt3.length - 1) {
         cy.get($el)
           .should("contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt3[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       } else {
         cy.get($el)
           .should("not.contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt3[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
     });
 
-    cy.get('[data-testid="buttonStackRemove"]').click();
+    cy.get(buttonRemoveSelector).click();
 
     cy.get("@circles").each(($el, index) => {
       if (index === outputDataSt3.length - 1) {
         cy.get($el)
           .should("contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt3[index])
           .should("have.css", "border", `4px solid ${stateChanging}`);
       } else {
         cy.get($el)
           .should("not.contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt3[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
     });
 
     cy.get("@circles")
-      .children('[data-testid="circleBorder"]', {
+      .children(circleBorderSelector, {
         timeout: 500 * outputDataSt2.length,
       })
       .should("have.lengthOf", outputDataSt2.length);
@@ -168,38 +176,38 @@ describe('компонент "стек" работает корректно', fu
       if (index === outputDataSt2.length - 1) {
         cy.get($el)
           .should("contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       } else {
         cy.get($el)
           .should("not.contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
     });
 
-    cy.get('[data-testid="buttonStackRemove"]').click();
+    cy.get(buttonRemoveSelector).click();
 
     cy.get("@circles").each(($el, index) => {
       if (index === outputDataSt2.length - 1) {
         cy.get($el)
           .should("contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateChanging}`);
       } else {
         cy.get($el)
           .should("not.contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
     });
 
     cy.get("@circles")
-      .children('[data-testid="circleBorder"]', {
+      .children(circleBorderSelector, {
         timeout: 500 * outputDataSt1.length,
       })
       .should("have.lengthOf", outputDataSt1.length);
@@ -208,39 +216,37 @@ describe('компонент "стек" работает корректно', fu
       if (index === outputDataSt1.length - 1) {
         cy.get($el)
           .should("contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt1[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       } else {
         cy.get($el)
           .should("not.contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt1[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
     });
 
-    cy.get('[data-testid="buttonStackRemove"]').click();
+    cy.get(buttonRemoveSelector).click();
 
     cy.get("@circles").each(($el, index) => {
       if (index === outputDataSt1.length - 1) {
         cy.get($el)
           .should("contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt1[index])
           .should("have.css", "border", `4px solid ${stateChanging}`);
       } else {
         cy.get($el)
           .should("not.contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt1[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
     });
 
-    cy.get("[data-testid='stackContainer']")
-      .children()
-      .should("have.length", 0);
+    cy.get(stackContainerSelector).children().should("have.length", 0);
   });
 
   it("стек очищается корректно", function () {
@@ -252,39 +258,39 @@ describe('компонент "стек" работает корректно', fu
     const stateDefault = "rgb(0, 50, 255)";
     const stateChanging = "rgb(210, 82, 225)";
 
-    cy.get('[data-testid="inputStack"]').type(inputDataSt1);
-    cy.get('[data-testid="buttonStackAdd"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputDataSelector).type(inputDataSt1);
+    cy.get(buttonAddSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     cy.get("@circles").each(($el, index) => {
       cy.get($el)
         .should("contain", "Top")
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", outputDataSt1[index])
         .should("have.css", "border", `4px solid ${stateChanging}`);
     });
     cy.get("@circles").each(($el, index) => {
       cy.get($el)
         .should("contain", "Top")
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("contain", outputDataSt1[index])
         .should("have.css", "border", `4px solid ${stateDefault}`);
     });
 
-    cy.get('[data-testid="inputStack"]').type(inputDataSt2);
-    cy.get('[data-testid="buttonStackAdd"]').click();
+    cy.get(inputDataSelector).type(inputDataSt2);
+    cy.get(buttonAddSelector).click();
 
     cy.get("@circles").each(($el, index) => {
       if (index === outputDataSt2.length - 1) {
         cy.get($el)
           .should("contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateChanging}`);
       } else {
         cy.get($el)
           .should("not.contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
@@ -293,22 +299,20 @@ describe('компонент "стек" работает корректно', fu
       if (index === outputDataSt2.length - 1) {
         cy.get($el)
           .should("contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       } else {
         cy.get($el)
           .should("not.contain", "Top")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataSt2[index])
           .should("have.css", "border", `4px solid ${stateDefault}`);
       }
     });
 
-    cy.get('[data-testid="buttonStackReset"]').click();
+    cy.get(buttonResetSelector).click();
 
-    cy.get("[data-testid='stackContainer']")
-      .children()
-      .should("have.length", 0);
+    cy.get(stackContainerSelector).children().should("have.length", 0);
   });
 });

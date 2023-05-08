@@ -1,3 +1,10 @@
+const inputDataSelector = '[data-testid="inputQueue"]';
+const buttonAddSelector = '[data-testid="buttonQueueAdd"]';
+const buttonRemoveSelector = '[data-testid="buttonQueueRemove"]';
+const buttonResetSelector = '[data-testid="buttonQueueReset"]';
+const circlesContainerSelector = '[data-testid="circlesContainer"]';
+const circleBorderSelector = '[data-testid="circleBorder"]';
+
 const displayStep = ({
   el,
   headOne,
@@ -14,36 +21,36 @@ const displayStep = ({
     if (headOne <= index && index <= tailOne) {
       if (add && tailOne === index) {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("have.css", "border", `4px solid ${stateOne}`);
       } else if (headOne === index && !add) {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("have.css", "border", `4px solid ${stateOne}`);
       } else {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("have.css", "border", `4px solid ${stateTwo}`);
       }
       if (headOne === index && index === tailOne) {
         cy.get($el)
           .should("contain", "head")
           .should("contain", "tail")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataOne[index]);
       } else if (headOne === index) {
         cy.get($el)
           .should("contain", "head")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataOne[index]);
       } else if (tailOne === index) {
         cy.get($el)
           .should("contain", "tail")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataOne[index]);
       } else {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataOne[index]);
       }
     }
@@ -51,27 +58,27 @@ const displayStep = ({
   cy.get(el).each(($el, index) => {
     if (headTwo <= index && index <= tailTwo) {
       cy.get($el)
-        .children('[data-testid="circleBorder"]')
+        .children(circleBorderSelector)
         .should("have.css", "border", `4px solid ${stateTwo}`);
       if (headTwo === index && index === tailTwo) {
         cy.get($el)
           .should("contain", "head")
           .should("contain", "tail")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataTwo[index]);
       } else if (headTwo === index) {
         cy.get($el)
           .should("contain", "head")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataTwo[index]);
       } else if (tailTwo === index) {
         cy.get($el)
           .should("contain", "tail")
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataTwo[index]);
       } else {
         cy.get($el)
-          .children('[data-testid="circleBorder"]')
+          .children(circleBorderSelector)
           .should("contain", outputDataTwo[index]);
       }
     }
@@ -84,14 +91,14 @@ describe('компонент "очередь" работает корректн�
   });
 
   it("кнопка добавления должна быть недоступной при пустом инпуте", function () {
-    cy.get('[data-testid="inputQueue"]').should("contain", "");
-    cy.get('[data-testid="buttonQueueAdd"]').should("be.disabled");
+    cy.get(inputDataSelector).should("contain", "");
+    cy.get(buttonAddSelector).should("be.disabled");
   });
 
   it("кнопка доступна при не пустом инпуте", function () {
     cy.visit("/queue");
-    cy.get('[data-testid="inputQueue"]').type("2");
-    cy.get('[data-testid="buttonQueueAdd"]').should("be.enabled");
+    cy.get(inputDataSelector).type("2");
+    cy.get(buttonAddSelector).should("be.enabled");
   });
 
   it("значение 2 корректно добавляется в начало стека", function () {
@@ -101,9 +108,9 @@ describe('компонент "очередь" работает корректн�
     const stateDefault = "rgb(0, 50, 255)";
     const stateChanging = "rgb(210, 82, 225)";
 
-    cy.get('[data-testid="inputQueue"]').type(inputData);
-    cy.get('[data-testid="buttonQueueAdd"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputDataSelector).type(inputData);
+    cy.get(buttonAddSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     displayStep({
       el: "@circles",
@@ -139,9 +146,9 @@ describe('компонент "очередь" работает корректн�
     const headSt5 = 2;
     const tailSt5 = 2;
 
-    cy.get('[data-testid="inputQueue"]').type(inputDataSt1);
-    cy.get('[data-testid="buttonQueueAdd"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputDataSelector).type(inputDataSt1);
+    cy.get(buttonAddSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     displayStep({
       el: "@circles",
@@ -153,8 +160,8 @@ describe('компонент "очередь" работает корректн�
       add: true,
     });
 
-    cy.get('[data-testid="inputQueue"]').type(inputDataSt2);
-    cy.get('[data-testid="buttonQueueAdd"]').click();
+    cy.get(inputDataSelector).type(inputDataSt2);
+    cy.get(buttonAddSelector).click();
 
     displayStep({
       el: "@circles",
@@ -166,8 +173,8 @@ describe('компонент "очередь" работает корректн�
       add: true,
     });
 
-    cy.get('[data-testid="inputQueue"]').type(inputDataSt3);
-    cy.get('[data-testid="buttonQueueAdd"]').click();
+    cy.get(inputDataSelector).type(inputDataSt3);
+    cy.get(buttonAddSelector).click();
 
     displayStep({
       el: "@circles",
@@ -179,7 +186,7 @@ describe('компонент "очередь" работает корректн�
       add: true,
     });
 
-    cy.get('[data-testid="buttonQueueRemove"]').click();
+    cy.get(buttonRemoveSelector).click();
 
     displayStep({
       el: "@circles",
@@ -194,7 +201,7 @@ describe('компонент "очередь" работает корректн�
       add: false,
     });
 
-    cy.get('[data-testid="buttonQueueRemove"]').click();
+    cy.get(buttonRemoveSelector).click();
 
     displayStep({
       el: "@circles",
@@ -209,7 +216,7 @@ describe('компонент "очередь" работает корректн�
       add: false,
     });
 
-    cy.get('[data-testid="buttonQueueRemove"]').click();
+    cy.get(buttonRemoveSelector).click();
 
     displayStep({
       el: "@circles",
@@ -222,8 +229,8 @@ describe('компонент "очередь" работает корректн�
       add: false,
     });
 
-    cy.get('[data-testid="inputQueue"]').type(inputDataSt3);
-    cy.get('[data-testid="buttonQueueAdd"]').click();
+    cy.get(inputDataSelector).type(inputDataSt3);
+    cy.get(buttonAddSelector).click();
 
     displayStep({
       el: "@circles",
@@ -248,11 +255,10 @@ describe('компонент "очередь" работает корректн�
     const tailSt1 = 0;
     const headSt2 = 0;
     const tailSt2 = 1;
-   
 
-    cy.get('[data-testid="inputQueue"]').type(inputDataSt1);
-    cy.get('[data-testid="buttonQueueAdd"]').click();
-    cy.get('[data-testid="circlesContainer"]').as("circles");
+    cy.get(inputDataSelector).type(inputDataSt1);
+    cy.get(buttonAddSelector).click();
+    cy.get(circlesContainerSelector).as("circles");
 
     displayStep({
       el: "@circles",
@@ -264,8 +270,8 @@ describe('компонент "очередь" работает корректн�
       add: true,
     });
 
-    cy.get('[data-testid="inputQueue"]').type(inputDataSt2);
-    cy.get('[data-testid="buttonQueueAdd"]').click();
+    cy.get(inputDataSelector).type(inputDataSt2);
+    cy.get(buttonAddSelector).click();
 
     displayStep({
       el: "@circles",
@@ -277,14 +283,14 @@ describe('компонент "очередь" работает корректн�
       add: true,
     });
 
-    cy.get('[data-testid="buttonQueueReset"]').click();
+    cy.get(buttonResetSelector).click();
 
     cy.get("@circles").each(($el) => {
       cy.get($el)
         .should("not.contain", "head")
         .should("not.contain", "tail")
-        .children('[data-testid="circleBorder"]')
-        .should("contain", '');
+        .children(circleBorderSelector)
+        .should("contain", "");
     });
   });
 });

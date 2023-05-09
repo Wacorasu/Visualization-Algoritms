@@ -54,6 +54,7 @@ export const FibonacciPage: React.FC = () => {
       <div className={string.pageContainer}>
         <form className={string.containerInput} onSubmit={getFibonacciString}>
           <Input
+            data-testid="inputFibonacci"
             isLimitText
             max={MAX_FIBONACCI_NUMBER}
             type="number"
@@ -64,7 +65,8 @@ export const FibonacciPage: React.FC = () => {
             }
           />
           <Button
-            text="Развернуть"
+            data-testid="buttonFibonacci"
+            text="Рассчитать"
             type="submit"
             isLoader={step >= formValue.outputNumbers.length ? false : true}
             disabled={formValue.inputNumber === ""}

@@ -37,7 +37,6 @@ export const StringComponent: React.FC = () => {
 
   const getReverseString = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const letters = formValue.inputData.toUpperCase();
     setCurrentStep(null);
     setStepsIndex(0);
@@ -49,6 +48,7 @@ export const StringComponent: React.FC = () => {
       <div className={string.pageContainer}>
         <form className={string.containerInput} onSubmit={getReverseString}>
           <Input
+            data-testid='inputString'
             maxLength={MAX_STRING_LENGTH}
             isLimitText
             name="lettersInput"
@@ -61,13 +61,14 @@ export const StringComponent: React.FC = () => {
             }}
           />
           <Button
+            data-testid="buttonString"
             text="Развернуть"
             type="submit"
             isLoader={stepsIndex >= steps.length ? false : true}
             disabled={formValue.inputData === ""}
           />
         </form>
-        <div className={string.containerCircle}>
+        <div  className={string.containerCircle}>
           {currentStep &&
             currentStep.letters.map((element, index) => {
               let stateClass: ElementStates | undefined =
@@ -88,7 +89,7 @@ export const StringComponent: React.FC = () => {
                   stateClass = ElementStates.Modified;
                 }
               }
-              return <Circle letter={element} state={stateClass} key={index} />;
+              return <Circle data-testid={`output-${index}`} letter={element} state={stateClass} key={index} />;
             })}
         </div>
       </div>

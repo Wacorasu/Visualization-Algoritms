@@ -90,6 +90,7 @@ export const QueuePage: React.FC = () => {
         <div className={queueClass.containerInput}>
           <form className={queueClass.mainInput} onSubmit={enqueue}>
             <Input
+              data-testid="inputQueue"
               maxLength={MAX_CIRCLE_WORD_LENGTH}
               isLimitText
               type="text"
@@ -103,6 +104,7 @@ export const QueuePage: React.FC = () => {
               }}
             />
             <Button
+              data-testid="buttonQueueAdd"
               text="Добавить"
               type="submit"
               isLoader={activeAdd}
@@ -114,6 +116,7 @@ export const QueuePage: React.FC = () => {
               extraClass={queueClass.inputField}
             />
             <Button
+              data-testid="buttonQueueRemove"
               text="Удалить"
               type="button"
               onClick={() => startDequeue()}
@@ -127,6 +130,7 @@ export const QueuePage: React.FC = () => {
             />
           </form>
           <Button
+            data-testid="buttonQueueReset"
             text="Очистить"
             type="button"
             isLoader={false}

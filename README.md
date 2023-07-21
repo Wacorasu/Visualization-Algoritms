@@ -26,7 +26,7 @@
 
 
 ### Макет
-<a href="https://www.figma.com/file/qh4NUM6J9qcK8uiXPMJ65T/Algososh_external_link-(Copy)?type=design&mode=design&t=LxtICOO2IwjFBUeQ-1" alt='maket figma' /></a>
+<a href="https://www.figma.com/file/qh4NUM6J9qcK8uiXPMJ65T/Algososh_external_link-(Copy)?type=design&mode=design&t=LxtICOO2IwjFBUeQ-1" alt='maket figma' target="_blank" rel="noopener noreferrer"><img  src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" alt='maket figma' /></a>
 
 
 ### Запуск
